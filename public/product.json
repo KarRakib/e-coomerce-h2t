@@ -1,0 +1,48 @@
+{
+    "product_id": "12345",
+    "name": "Example Product",
+    "description": "This is an example product.",
+    "price": 19.99,
+    "currency": "USD",
+    "category": "Clothing",
+    "brand": "Example Brand",
+    "color": "Black",
+    "sizes": [
+      {
+        "size_id": "size_1",
+        "name": "Small",
+        "price": 19.99,
+        "inventory": 10
+      },
+      {
+        "size_id": "size_2",
+        "name": "Medium",
+        "price": 19.99,
+        "inventory": 20
+      },
+      {
+        "size_id": "size_3",
+        "name": "Large",
+        "price": 19.99,
+        "inventory": 15
+      }
+    ],
+    "rating": 4.5,
+    "reviews": [
+      {
+        "user": "JohnDoe",
+        "rating": 5,
+        "comment": "Great product!"
+      },
+      {
+        "user": "JaneSmith",
+        "rating": 4,
+        "comment": "Good quality."
+      }
+    ],
+    "images": [
+      "https://example.com/product_image1.jpg",
+      "https://example.com/product_image2.jpg"
+    ]
+  }
+  
