@@ -1,54 +1,75 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../Context/AuthContext';
+import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
 
 const AllOrders = () => {
-    const { user } = useContext(UserContext)
-    const [myOrders, setMyOrders] = useState([]);
+  const { user } = useContext(UserContext)
+  const [myOrders, setMyOrders] = useState([]);
+  const {isFetching } = useQuery();
 
-    useEffect(() => {
-        fetch(`http://localhost:7000/get-orders?email=${user?.email}`,)
-            .then(res => res.json())
-            .then(data => setMyOrders(data))
-    }, [user?.email])
-    console.log(myOrders);
-    return (
-        <div className="overflow-x-auto">
-  <table className="table table-zebra w-full">
-    {/* head */}
-    <thead>
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Job</th>
-        <th>Favorite Color</th>
-      </tr>
-    </thead>
-    <tbody>
-      {/* row 1 */}
-      <tr>
-        <th>1</th>
-        <td>Cy Ganderton</td>
-        <td>Quality Control Specialist</td>
-        <td>Blue</td>
-      </tr>
-      {/* row 2 */}
-      <tr>
-        <th>2</th>
-        <td>Hart Hagerty</td>
-        <td>Desktop Support Technician</td>
-        <td>Purple</td>
-      </tr>
-      {/* row 3 */}
-      <tr>
-        <th>3</th>
-        <td>Brice Swyre</td>
-        <td>Tax Accountant</td>
-        <td>Red</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-    );
+  useEffect(() => {
+    fetch('http://localhost:7000/get-order',)
+      .then(res => res.json())
+      .then(data => setMyOrders(data))
+  }, [])
+  console.log(myOrders);
+  {
+    myOrders.map(order => console.log(order))
+  }
+  const handleChangeStatus =(id) =>{
+    fetch(`http://localhost:7000/status/${id}`,{
+      method:"PATCH"
+    })
+    .then(res=>res.json())
+        .then(data => {
+          console.log(data)
+          isFetching ()
+        })
+  }
+  let buttonColorClass = '';
+  
+  // if (orders?.status === 'Shipping') {
+  //   buttonColorClass = 'bg-red-500';
+  // } else if (orders?.status === 'Pending') {
+  //   buttonColorClass = 'bg-yellow-500';
+  // }
+  return (
+    <div className="overflow-x-auto">
+      <table className="table table-zebra w-full">
+        {/* head */}
+        <thead>
+          <tr>
+            <th>Address</th>
+            <th>Transition Id</th>
+            <th>Contact Number</th>
+            <th>Status</th>
+              <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {
+            myOrders?.map(orders => (
+              // eslint-disable-next-line react/jsx-key
+              <tr>
+                <th>{orders?.data?.address1} </th>
+                <th>{orders?.data?.id} </th>
+                <th>{orders?.data?.contact} </th>
+                <th><button 
+                
+                onClick={()=> handleChangeStatus(orders._id)}> {orders?.status} </button> </th>
+                <th><Link to={orders?._id}>View </Link> </th>
+              </tr>
+
+            ))
+          }
+
+
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export default AllOrders;

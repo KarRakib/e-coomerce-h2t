@@ -14,14 +14,20 @@ import DashboardLayout from '../Components/Dashboard/DashboardLayout';
 import DisplayError from './DisplayError';
 import ForgetPassword from '../UseAuthentication/ForgetPassword';
 import PaymentPage from '../Components/Dashboard/PaymentPage';
+import MyOrderView from '../Components/Dashboard/MyOrderView';
+import OrderView from '../Components/Dashboard/OrderView';
+import AddProducts from '../Components/Dashboard/AddProducts';
+import AddBestSell from '../Components/Dashboard/AddBestSell';
 
+// eslint-disable-next-line react/prop-types
 const Router = ({ children }) => {
     const [products, setProducts] = useState([])
     useEffect(() => {
-      fetch('http://localhost:7000/products')
+      fetch('http://localhost:7000/prod')
         .then(res => res.json())
         .then(data => setProducts(data))
     }, [])
+    console.log(products);
     const router = createBrowserRouter([
         {
             path: '/',
@@ -33,7 +39,7 @@ const Router = ({ children }) => {
                 },
                 {
                     path: '/products/:id',
-                    loader: ({ params }) => fetch(`http://localhost:7000/products/${params.id}`),
+                    loader: ({ params }) => fetch(`http://localhost:7000/prod/${params.id}`),
                     element: <ProductDetails products={products}></ProductDetails>
                 },
                 {
@@ -57,6 +63,11 @@ const Router = ({ children }) => {
                     element:<PaymentPage></PaymentPage>
                 },
                 {
+                    path:'/my-orders/:id',
+                    loader:({params})=>fetch(`http://localhost:7000/my-orders/${params.id}`),
+                    element:<MyOrderView></MyOrderView>
+                },
+                {
                     path:'/forget-pass',
                     element:<ForgetPassword></ForgetPassword>
                 }
@@ -72,8 +83,21 @@ const Router = ({ children }) => {
                     element:<AllOrders></AllOrders>
                 },
                 {
+                    path:'/admin/all-orders/:id',
+                    loader:({params})=> fetch(`http://localhost:7000/my-orders/${params.id}`),
+                    element:<OrderView></OrderView>
+                },
+                {
                     path:'/admin/all-user',
                     
+                },
+                {
+                    path:'/admin/add-products',
+                    element:<AddProducts></AddProducts>
+                },
+                {
+                    path:'/admin/add-sell',
+                    element:<AddBestSell></AddBestSell>
                 }
             ]
         }

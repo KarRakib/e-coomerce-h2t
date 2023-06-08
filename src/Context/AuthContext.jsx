@@ -2,15 +2,17 @@ import React from 'react';
 import { useState } from 'react';
 import { createContext } from 'react';
 import app from '../Firebase/Firebase.config';
-import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut, updateProfile } from 'firebase/auth';
+import { FacebookAuthProvider, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut, updateProfile } from 'firebase/auth';
 import { useEffect } from 'react';
+// eslint-disable-next-line react-refresh/only-export-components
 export const auth = getAuth(app)
 export const UserContext = createContext()
+// eslint-disable-next-line react/prop-types
 const AuthContext = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loader, setLoader] = useState(true)
-    const googleProvider = new GoogleAuthProvider()
-    const facebookProvider = new GoogleAuthProvider()
+    // const googleProvider = new GoogleAuthProvider()
+    const facebookProvider = new FacebookAuthProvider()
     const userRegister = (email, password) => {
         return createUserWithEmailAndPassword(auth,email,password)
     }
@@ -39,16 +41,18 @@ const AuthContext = ({ children }) => {
     const restPassword = (email) =>{
         return sendPasswordResetEmail(auth,email)
     }
-    const signInGoogle =()=>{
-        return signInWithPopup(auth,googleProvider)
-    }
+    // const signInGoogle =()=>{
+    //     return signInWithPopup(auth,googleProvider)
+    // }
     const signInFacebook =()=>{
-        return signInWithRedirect(auth,facebookProvider)
+        return signInWithPopup(auth,facebookProvider)
     }
     const userSignOut = () =>{
+       window.localStorage.clear()
         return signOut(auth)
+
     }
-    const userValue = { user,userRegister,userLogIn,loader,setLoader,upDateUser,emailVerify,restPassword,signInGoogle,signInFacebook ,userSignOut}
+    const userValue = { user,userRegister,userLogIn,loader,setLoader,upDateUser,emailVerify,restPassword,signInFacebook ,userSignOut}
     return (
         <UserContext.Provider value={userValue}>
             {children}

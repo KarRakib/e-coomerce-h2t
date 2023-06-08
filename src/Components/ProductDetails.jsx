@@ -5,47 +5,70 @@ import Product from './Product';
 import { AddContext } from '../Context/ProductContext';
 import { UserContext } from '../Context/AuthContext';
 import { useEffect } from 'react';
+import 'react-photo-view/dist/react-photo-view.css';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+
 
 
 // eslint-disable-next-line react/prop-types
 const ProductDetails = ({ products }) => {
-    const {user} = useContext(UserContext)
+    const { user } = useContext(UserContext)
     const productDetails = useLoaderData();
-    const [justCheck, setJustCheck] = useState()
-    const { image, name, price } = productDetails;
-    const [index, setIndex] = useState(0);
-    const { incQty, decQty, qty, addToCart } = useContext(AddContext)
-    useEffect(()=>{
-        fetch('/products.json')
-        .then(res=>res.json())
-        .then(data=> setJustCheck(data))
-    },[])
-    const images = [{
-        img: 'https://i.ibb.co/T4LWR3W/speaker1.webp'
-    }, {
-        img: 'https://i.ibb.co/yszJ8tF/headphones-c-4.webp'
-    }, {
-        img: 'https://i.ibb.co/gMKKdWb/headphones-c-3.webp'
-    }]
-    console.log(images);
-    
+    const [selectedSize, setSelectedSize] = useState(false);
+    const { images, name, price, description, sizes } = productDetails;
+    console.log(sizes);
+    const { incQty, decQty, qty, addToCart, size, setSize } = useContext(AddContext)
+
+    const ima = "https://i.ibb.co/x1C6rs0/flash-1.webp"
+    const imagess = [
+        { id: 1, smallImage: "https://i.ibb.co/x1C6rs0/flash-1.webp", largeImage: "https://i.ibb.co/x1C6rs0/flash-1.webp" },
+        { id: 2, smallImage: " https://i.ibb.co/3yVykxL/watch-2.webp", largeImage: " https://i.ibb.co/3yVykxL/watch-2.webp" },
+        { id: 3, smallImage: "https://i.ibb.co/GFnQpds/watch-1.webp", largeImage: "https://i.ibb.co/GFnQpds/watch-1.webp" },
+      
+    ];
+    const [selectedImage, setSelectedImage] = useState(images[0]?.largeImage);
+    const handleImageClick = (image) => {
+        setSelectedImage(image);
+    };
+
+
+    const handleClick = (size) => {
+        setSelectedSize(size);
+    };
+    useEffect(() => {
+        setSize(selectedSize)
+    }, [selectedSize])
+
+
+
     return (
         <div>
             <div className='product-detail-container'>
                 <div>
                     <div className='image-container'>
-                        <img className='product-detail-image'
-                            src={image} alt="" />
+                        <PhotoProvider>
+                            <div className="foo">
+                                {selectedImage && (
+                                    <PhotoView src={selectedImage} className='product-detail-image' >
+                                        <img className='product-detail-image' src={selectedImage} alt="" />
+                                    </PhotoView>
+
+                                )}
+                            </div>
+                        </PhotoProvider>
+
                     </div>
                     <div className='small-images-container'>
-                        {images?.map((item, i) => (
-                            <img
-                                key={i}
-                                src={item.img}
-                                className={i === index ? 'small-image selected-image' : 'small-image'}
-                                onMouseEnter={() => setIndex(i)}
-                            />
+                        {images?.map((image) => (
+                            <div
+                                key={image.id}
+                                className="w-32 h-32 m-2 cursor-pointer"
+                                onClick={() => handleImageClick(image.largeImage)}
+                            >
+                                <img src={image.smallImage} alt={`Small Image ${image.id}`} className="w-full h-full" />
+                            </div>
                         ))}
+
                     </div>
                 </div>
                 <div className='product-details-desc'>
@@ -61,10 +84,25 @@ const ProductDetails = ({ products }) => {
                         <p> (7)</p>
                     </div>
                     <h4>Details</h4>
-                    <p>Details</p>
-                    <p className='price'>{price} </p>
+                    <p>{description} </p>
+                    <div>
+                        {
+                            sizes?.map(size => (
+                                // eslint-disable-next-line react/jsx-key
+                                <button
+                                    onClick={() => handleClick(size.size)}
+                                    className={`px-2 border ${selectedSize === size.size ? 'bg-indigo-600' : 'border-indigo-600'
+                                        }`}
+                                >
+                                    {size.size}
+                                </button>
+                            ))
+                        }
+
+                    </div>
+                    <p className='price'>{price} Tk </p>
                     <div className='quantity'>
-                        <h3>Quantity</h3>
+                        <h3>Product Code #254712 </h3>
                         <p className='quantity-desc flex h-8 items-center '>
                             <span onClick={decQty} className='minus '><AiOutlineMinus /> </span>
                             <span className='num'>{qty} </span>

@@ -33,7 +33,7 @@ const Cart = () => {
                     {
                         cartItems?.map(item => (
                             <div className='product' key={item._id}>
-                                <img src={item.image} className='cart-product-image' alt="" />
+                                <img src={item.images} className='cart-product-image' alt="" />
                                 <div className='item-desc'>
                                     <div className='flex top'>
                                         <h5> {item.name} </h5>
@@ -69,10 +69,10 @@ const Cart = () => {
                                  onClick={() => setShowCart(false)}
                                    to='/payment'
                                     type='button'
-                                    className='btn'>
-                                    buy now
+                                    className='bg-[#f02d34] text-white py-2 px-4 rounded text-2xl '>
+                                    Buy now
                                 </Link>
-                                <h3>{totalPrice} taka </h3>
+                                <h3>{totalPrice} Taka </h3>
                             </div>
                             <div className=''>
                                 

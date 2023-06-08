@@ -3,6 +3,8 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import { Outlet } from 'react-router-dom';
 import Nav from './Nav'
+import HeroBanner from './HeroBanner';
+import FooterBanner from './FooterBanner';
 
 const Layout = () => {
     return (
@@ -11,7 +13,8 @@ const Layout = () => {
             {/* <Nav></Nav> */}
             <Navbar></Navbar>
             <Outlet></Outlet>
-            <Footer></Footer>
+            {/* <Footer></Footer> */}
+            <FooterBanner></FooterBanner>
         </div>
     );
 };

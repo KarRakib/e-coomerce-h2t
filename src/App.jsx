@@ -4,17 +4,21 @@ import ProductContext from './Context/ProductContext'
 import Router from './Router/Router'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { QueryClient, QueryClientProvider} from 'react-query'
+const queryClient = new QueryClient()
 function App() {
- 
+
 
   return (
     <div className='App.css'>
-        <AuthContext>
+      <QueryClientProvider client={queryClient}>
+      <AuthContext>
         <ProductContext>
           <Router></Router>
-          <ToastContainer/>
+          <ToastContainer />
         </ProductContext>
-        </AuthContext>
+      </AuthContext>
+      </QueryClientProvider>
     </div>
   )
 }

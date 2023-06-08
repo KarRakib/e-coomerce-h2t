@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { UserContext } from './AuthContext';
-import { format } from 'date-fns';
 
 
 export const AddContext = createContext()
@@ -15,12 +14,9 @@ const ProductContext = ({ children }) => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [totalQuantity, setTotalQuantity] = useState(0);
     const [qty, setQty] = useState(1);
+    const [size, setSize]= useState(false)
 
-    const currentDate = new Date();
-    const toDay = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
-
-
-    const orderNumber = Math.floor(Math.random() * 1000000) + 1;
+    
     let foundProduct;
     let index;
     const addToCart = (product, quantity) => {
@@ -38,10 +34,8 @@ const ProductContext = ({ children }) => {
                     if (cartProduct._id === product._id) return {
                         ...cartProduct,
                         quantity: cartProduct.quantity + quantity,
-                        order: orderNumber,
-                        date: toDay,
-                        user: user?.email,
-                        status: 'pending',
+                        size
+                        
 
                     }
                 })
@@ -50,10 +44,7 @@ const ProductContext = ({ children }) => {
             else {
                 product.quantity = quantity;
                 setCartItems([...cartItems, {
-                    ...product, order: orderNumber,
-                    date: toDay,
-                    user: user?.email,
-                    status: 'pending',
+                    ...product, size
 
                 }])
             }
@@ -137,7 +128,7 @@ const ProductContext = ({ children }) => {
         setTotalQuantity(0)
         setTotalPrice(' ')
     }
-    const cartInfo = { showCart, setShowCart, cartItems,  resetCart, totalPrice, totalQuantity, setTotalQuantity, setTotalPrice, qty, incQty, decQty, addToCart, toggleCartQuantity, removeCart }
+    const cartInfo = { showCart, setShowCart, cartItems,size, setSize,  resetCart, totalPrice, totalQuantity, setTotalQuantity, setTotalPrice, qty, incQty, decQty, addToCart, toggleCartQuantity, removeCart }
     return (
         <AddContext.Provider value={cartInfo}>
             {children}

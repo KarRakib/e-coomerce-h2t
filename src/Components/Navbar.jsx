@@ -7,7 +7,11 @@ import { UserContext, auth } from '../Context/AuthContext'
 
 const Navbar = () => {
     const { showCart, setShowCart, totalQuantity } = useContext(AddContext)
-    const { user } = useContext(UserContext)
+    const { user ,userSignOut} = useContext(UserContext)
+    const handleSignOut =()=>{
+        console.log('yyyyyy');
+        userSignOut()
+    }
     const navItem = <>
         
         <li><NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}> Home </NavLink></li>
@@ -15,7 +19,7 @@ const Navbar = () => {
          {
             user?.email? <> 
              <li><Link to='/my-orders'>My Order</Link> </li>
-        <li><button onClick={() => auth.signOut()}>Sign Out</button> </li>
+        <li><button onClick={handleSignOut}>Sign Out</button> </li>
             </>:
          <li tabIndex={0}>
          <a>

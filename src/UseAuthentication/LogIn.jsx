@@ -3,13 +3,55 @@ import { useContext } from 'react';
 import { UserContext } from '../Context/AuthContext';
 import { useForm } from 'react-hook-form';
 
+
 const ForgotPassword = () => {
-  const { userLogIn } = useContext(UserContext)
+  const { userLogIn,signInFacebook ,signInGoogle } = useContext(UserContext)
+ 
   const { register, handleSubmit } = useForm()
+  const handleFacebook = () => {
+    signInFacebook ()
+      .then((result) => {
+        // Handle successful authentication
+        console.log(result);
+        // const user = result.user;
+        // const credential = FacebookAuthProvider.credentialFromResult(result);
+        // const accessToken = credential.accessToken;
+      })
+      .catch((error) => {
+       console.log(error)
+      });
+  };
+  const handleGoogle =()=>{
+    signInGoogle()
+  }
   const onSubmit = data => {
     console.log(data);
+    const presentUser = {
+      user: data.email
+    }
     userLogIn(data.email, data.password)
-      .then(() => {
+      .then((result) => {
+
+        const user = result.user
+        if (user) {
+          const currentUser = {
+            email: user.email
+          }
+          console.log(currentUser);
+          fetch('http://localhost:7000/jwt', {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json'
+            },
+            body: JSON.stringify(currentUser)
+
+          })
+            .then(res => res.json())
+            .then(data => {
+              console.log(data)
+              localStorage.setItem('h2t-token', data.token)
+            })
+        }
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -19,19 +61,21 @@ const ForgotPassword = () => {
 
   return (
     <div>
+
+
       <div className="font-mono bg-gray-400">
         <div className="container mx-auto">
           <div className="flex justify-center items-center h-screen px-6">
             <div className="w-full xl:w-3/4 lg:w-11/12 flex">
               <div
-                className="w-full h-auto bg-gray-400 hidden lg:block lg:w-1/2 bg-cover rounded-l-lg"
+                className="w-full h-auto rounded  bg-gray-400 hidden lg:block lg:w-1/2 bg-cover rounded-l-lg"
                 style={{ backgroundImage: "url('https://i.ibb.co/K2JDMRp/login.png')" }}
               ></div>
               <div className="w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
                 <div className="px-8 mb-4 text-center">
                   <h3 className="pt-4 mb-2 text-2xl">Please Log In</h3>
-                  <button className='ml-4 mt-4' ><img className='w-8 h-8' src="https://i.ibb.co/tcScHS7/google.png" alt="" srcSet="" /> </button>
-                  <button className='w-8 h-8 ml-4 ' > <img className='w-8 h-8' src="https://i.ibb.co/y6v9F0G/facebook.png" alt="" srcSet="" />  </button>
+                  <button onClick={handleGoogle} className='ml-4 mt-4' ><img className='w-8 h-8' src="https://i.ibb.co/tcScHS7/google.png" alt="" srcSet="" /> </button>
+                  <button onClick={handleFacebook} className='w-8 h-8 ml-4 ' > <img className='w-8 h-8 ' src="https://i.ibb.co/y6v9F0G/facebook.png" alt="" srcSet="" />  </button>
                 </div>
                 <div className="px-8 pt-6 pb-8 mb-4 bg-white rounded">
                   <form onSubmit={handleSubmit(onSubmit)}>
@@ -40,7 +84,7 @@ const ForgotPassword = () => {
                         Email
                       </label>
                       <input
-                        className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                        className="w-full px-3 py-3 my-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                         {...register('email')}
                         type="email"
                         placeholder="Enter Email Address..."
