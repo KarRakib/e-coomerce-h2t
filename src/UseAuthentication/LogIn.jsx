@@ -26,9 +26,7 @@ const ForgotPassword = () => {
   }
   const onSubmit = data => {
     console.log(data);
-    const presentUser = {
-      user: data.email
-    }
+  
     userLogIn(data.email, data.password)
       .then((result) => {
 

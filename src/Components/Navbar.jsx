@@ -3,11 +3,12 @@ import { AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
 import { Link, NavLink } from 'react-router-dom';
 import Cart from './Cart';
 import { AddContext } from '../Context/ProductContext';
-import { UserContext, auth } from '../Context/AuthContext'
+import { UserContext } from '../Context/AuthContext'
 
 const Navbar = () => {
     const { showCart, setShowCart, totalQuantity } = useContext(AddContext)
     const { user ,userSignOut} = useContext(UserContext)
+    console.log('nav',user?.email);
     const handleSignOut =()=>{
         console.log('yyyyyy');
         userSignOut()

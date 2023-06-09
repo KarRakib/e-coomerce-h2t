@@ -8,6 +8,7 @@ import LogIn from '../UseAuthentication/LogIn';
 import MyOrder from '../Components/Dashboard/MyOrder';
 import SignUp from '../UseAuthentication/SignUp';
 import ProtectRouter from './ProtectRouter';
+import AdminProtect from './AdminProtect';
 import Product from '../Components/Product';
 import AllOrders from '../Components/Dashboard/AllOrders';
 import DashboardLayout from '../Components/Dashboard/DashboardLayout';
@@ -75,7 +76,7 @@ const Router = ({ children }) => {
         },
         {
             path:'/admin',
-            element:<DashboardLayout></DashboardLayout>,
+            element:<AdminProtect><DashboardLayout/> </AdminProtect>,
             errorElement:<DisplayError></DisplayError>,
             children:[
                 {

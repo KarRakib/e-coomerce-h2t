@@ -21,7 +21,7 @@ const AuthContext = ({ children }) => {
     }
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
-           console.log(currentUser);
+           console.log('check Auth',currentUser);
            if(currentUser===null || currentUser.emailVerified){
                setUser(currentUser)
            }

@@ -1,22 +1,30 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { AiFillFacebook } from 'react-icons/ai';
 import { FaGoogle } from 'react-icons/fa';
 import { UserContext } from '../Context/AuthContext';
 import { toast } from 'react-toastify';
+import useToken from '../Components/Dashboard/hooks/useToken';
 
 const SignUp = () => {
     const { register, handleSubmit, reset } = useForm();
     const apiKey = 'a212c56047d087bb05d56007d681eccd'
     const { userRegister, upDateUser,emailVerify, signInGoogle,signInFacebook } = useContext(UserContext)
+    const [createUserEmail, setCreateUserEmail] = useState('')
+    const navigate = useNavigate()
+    // const [token] = useToken(createUserEmail)
+    // if(token){
+    //     navigate('/')
+    // }
     const [isChecked, setIsChecked] = useState(false)
     const handleForm = data => {
 
         const formData = new FormData()
         userRegister(data?.email, data?.password)
             .then(result => {
-                emailVerify()
+                
+                // emailVerify()
                 const user = result.user
                 const photo = data.file[0]
 
@@ -30,12 +38,14 @@ const SignUp = () => {
                     .then(imagData => {
                         console.log(imagData.data.url);
                         upDateUser(data?.name, imagData.data.url)
+                        navigate('/')
                     })
                     .then(() => {
                         sendUser(data?.name, data?.email)
                     }).catch((error) => {
                         
                     });
+
                 reset()
             })
     }
@@ -51,8 +61,10 @@ const SignUp = () => {
         })
             .then(res => res.json())
             .then(data => {
+                setCreateUserEmail(email)
                 console.log(data)
                 if (data.acknowledged) {
+
                     emailVerify()
                     console.log('ki hoilo');
                     toast.success(`${user.name} please verify your email`)
